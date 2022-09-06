@@ -1,0 +1,47 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: shoppingapi-deployment
+  labels:
+   app: shoppingapi
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: shoppingapi
+  template:
+    metadata:
+      labels:
+        app: myapp
+    spec:
+      containers:
+      - name: shoppingapi
+        image: winsontay/shoppingapi:latest
+        imagePullPolicy: IfNotPresent
+        resources:
+          request:
+            memory: "64mi"
+            cpu: "250m"
+          limits:
+            memory: "128mi"
+            cpu: "500m"
+        ports:
+        - containerPort: 8000
+        env:
+         - name: ASPNETCORE_ENVIRONMENT
+           value: Development
+         - name: DatabaseSettings__ConnectionString
+           value: mongo-service
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: shoppingapi-service
+spec:
+  selector:
+    app: shoppingapi-service
+  ports:
+  - protocol: TCP
+    port: 8000
+    targetPort: 80
+    nodePort: 31000
