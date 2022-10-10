@@ -2,5 +2,8 @@ apiVersion: v1
 kind: ConfigMap
 metadata:
   name: mongo-configmap
+  namespace: dev-test
 data:
-  connection_string: mongodb://ynytech:password@mongo-service:27017
+  connection_string: mongo-service
+  database_url: mongodb://ynytech:password@mongo-service:27017
+  
